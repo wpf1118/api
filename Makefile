@@ -8,6 +8,7 @@ GOOS?=linux
 GOARCH?=amd64
 
 GO?=go
+RUNTIME?=docker
 
 IMAGE?=czht1118/api:latest
 
@@ -22,10 +23,11 @@ binary:
         " \
 		-o dist/api github.com/wpf1118/api
 
+.PHONY: build
 build: binary
 	$(RUNTIME) build -f build/Dockerfile -t $(IMAGE) .
 
-
+.PHONY: push
 push: build
 	$(RUNTIME) push $(IMAGE)
 
