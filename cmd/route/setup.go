@@ -2,7 +2,6 @@ package route
 
 import (
 	"github.com/wpf1118/api/cmd/route/user"
-	"github.com/wpf1118/toolbox/tools/logging"
 	"net/http"
 	"time"
 
@@ -33,7 +32,7 @@ func SetupChiRouter(
 	r.Use(middleware.StripSlashes)
 	//r.Use(middleware.Compress(5))
 	r.Use(middleware.Timeout(60 * time.Second))
-	if !httpLoggerDisabled && verbose {
+	if !httpLoggerDisabled {
 		r.Use(middleware.Logger)
 	}
 
@@ -50,5 +49,5 @@ type CorsLogger struct {
 }
 
 func (l *CorsLogger) Printf(s string, v ...interface{}) {
-	logging.DebugF(s, v...)
+	//logging.DebugF(s, v...)
 }

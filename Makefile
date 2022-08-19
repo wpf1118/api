@@ -14,7 +14,7 @@ IMAGE?=czht1118/api:latest
 .PHONY: binary
 binary:
 	@echo "+ $@"
-	CGO_ENABLED=0  $(GO) build -mod=mod \
+	CGO_ENABLED=0 GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO) build -mod=mod \
 		--ldflags "-s -w \
         	-X github.com/wpf1118/api/cmd.BuildTime=$(NOW) \
         	-X github.com/wpf1118/api/cmd.PWD=$(PWD) \
