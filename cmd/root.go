@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/viper"
 	"github.com/wpf1118/api/cmd/console"
 	"github.com/wpf1118/toolbox/tools"
+	"github.com/wpf1118/toolbox/tools/db"
 	"github.com/wpf1118/toolbox/tools/flag"
 	"github.com/wpf1118/toolbox/tools/logging"
 	"os"
@@ -56,6 +57,12 @@ func _init() {
 	if verbose {
 		logging.SetVerbose()
 	}
+
+	mysqlOpts := flag.NewDefaultMysqlOpts()
+	db.MysqlInit(mysqlOpts)
+
+	redisOpts := flag.NewDefaultRedisOpts()
+	db.RedisInit(redisOpts)
 }
 
 func init() {

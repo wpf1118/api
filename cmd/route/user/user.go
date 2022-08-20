@@ -3,7 +3,7 @@ package user
 import (
 	"encoding/json"
 	"github.com/go-chi/chi"
-	"github.com/wpf1118/api/cmd/code"
+	"github.com/wpf1118/api/cmd/errcode"
 	"github.com/wpf1118/toolbox/tools/response"
 	"net/http"
 )
@@ -32,12 +32,12 @@ func userDetail() http.HandlerFunc {
 		req := &Req{}
 		err := json.NewDecoder(r.Body).Decode(req)
 		if err != nil {
-			response.Error(w, code.ParseParamError)
+			response.Error(w, errcode.ParseParamError)
 			return
 		}
 
 		if req.ID <= 0 {
-			response.Error(w, code.ParseParamInvalid.AddF("ID"))
+			response.Error(w, errcode.ParseParamInvalid.AddF("ID"))
 			return
 		}
 
@@ -47,7 +47,7 @@ func userDetail() http.HandlerFunc {
 			return
 		}
 
-		response.Error(w, code.UserNotExists)
+		response.Error(w, errcode.UserNotExists)
 	}
 }
 

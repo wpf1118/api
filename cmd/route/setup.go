@@ -1,53 +1,18 @@
 package route
 
 import (
-	"github.com/wpf1118/api/cmd/route/user"
-	"net/http"
-	"time"
-
 	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
-	"github.com/go-chi/cors"
+	"github.com/wpf1118/api/cmd/route/common"
+	"github.com/wpf1118/api/cmd/route/image"
+	"github.com/wpf1118/api/cmd/route/user"
 )
 
-func SetupChiRouter(
-	httpLoggerDisabled bool,
-	verbose bool,
-) http.Handler {
-	r := chi.NewRouter()
-	cors := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"*"},
-		AllowCredentials: true,
-		Debug:            verbose,
-	})
-
-	cors.Log = &CorsLogger{}
-
-	r.Use(cors.Handler)
-	r.Use(middleware.RequestID)
-	r.Use(middleware.RealIP)
-	r.Use(middleware.Recoverer)
-	r.Use(middleware.StripSlashes)
-	//r.Use(middleware.Compress(5))
-	r.Use(middleware.Timeout(60 * time.Second))
-	if !httpLoggerDisabled {
-		r.Use(middleware.Logger)
-	}
-
+func SetupRouter(r *chi.Mux) {
 	r.Route("/api", func(r chi.Router) {
 		r.Route("/v1", func(r chi.Router) {
 			r.Route("/user", user.Route())
+			r.Route("/common", common.Route())
+			r.Route("/image", image.Route())
 		})
 	})
-
-	return r
-}
-
-type CorsLogger struct {
-}
-
-func (l *CorsLogger) Printf(s string, v ...interface{}) {
-	//logging.DebugF(s, v...)
 }

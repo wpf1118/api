@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/wpf1118/toolbox/tools"
+	"github.com/wpf1118/toolbox/tools/help"
 	"time"
 )
 
@@ -29,7 +29,7 @@ func init() {
 
 func printVersion() {
 	fmt.Printf("应用名称: api\n")
-	timeUnix := tools.StrToInt64(BuildTime)
+	timeUnix := help.StrToInt64(BuildTime)
 	timestamp := time.Unix(timeUnix, 0)
 	fmt.Printf("构建时间: %s\n", timestamp.Format("2006-01-02 15:04:05"))
 	fmt.Printf("构建位置: %s\n", PWD)
