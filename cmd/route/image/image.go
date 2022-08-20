@@ -36,10 +36,12 @@ func upload() http.HandlerFunc {
 		//fmt.Fprintf(w, "%v", handler.Header)
 
 		//创建上传目录
-		err = os.Mkdir("/data/images", os.ModePerm)
-		if err != nil {
-			response.Error(w, errcode.CreateDirError.AddError(err))
-			return
+		if _, err := os.Stat("/data/images"); os.IsNotExist(err) {
+			err = os.Mkdir("/data/images", os.ModePerm)
+			if err != nil {
+				response.Error(w, errcode.CreateDirError.AddError(err))
+				return
+			}
 		}
 
 		filePath := "/data/images/" + handler.Filename
@@ -61,7 +63,7 @@ func upload() http.HandlerFunc {
 			return
 		}
 
-		response.Ok(w, "data/images/"+handler.Filename)
+		response.Ok(w, handler.Filename)
 	}
 }
 
