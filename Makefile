@@ -9,8 +9,9 @@ GOARCH?=amd64
 
 GO?=go
 RUNTIME?=docker
+TAG?=v1
 
-IMAGE?=czht1118/api:latest
+IMAGE?=czht1118/api:$(TAG)
 
 .PHONY: binary
 binary:
