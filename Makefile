@@ -32,6 +32,14 @@ build: binary
 push: build
 	$(RUNTIME) push $(IMAGE)
 
+.PHONY: deploy
+deploy: binary
+	@echo "+ $@"
+	ssh -t wmf "rm -f /data/console/api && exit";
+	scp ./dist/api wmf:/data/console;
+	ssh -t wmf "cd /root/deploy-api && docker-compose restart api && exit";
+
+
 .PHONY: proto
 proto:
 	@echo "+ $@"
