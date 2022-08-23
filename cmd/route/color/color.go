@@ -43,7 +43,11 @@ func colorList() http.HandlerFunc {
 		var i int64
 		max := 255
 		for i = 0; i < size; i++ {
-			list = append(list, Color{Rgb: fmt.Sprintf("%d,%d,%d", help.RandLt(max), help.RandLt(max), help.RandLt(max))})
+			id := (page-1)*size + i
+			list = append(list, Color{
+				ID:  id,
+				Rgb: fmt.Sprintf("%d,%d,%d", help.RandLt(max), help.RandLt(max), help.RandLt(max)),
+			})
 		}
 
 		response.Ok(w, response.List{
