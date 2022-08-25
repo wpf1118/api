@@ -1,13 +1,16 @@
 package image
 
 import (
+	"fmt"
 	"github.com/go-chi/chi"
 	"github.com/wpf1118/api/cmd/errcode"
+	"github.com/wpf1118/toolbox/tools/help"
 	"github.com/wpf1118/toolbox/tools/logging"
 	"github.com/wpf1118/toolbox/tools/response"
 	"io"
 	"net/http"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 )
@@ -21,8 +24,6 @@ func Route() func(chi.Router) {
 
 func upload() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// todo 判断文件类型为图片
-
 		//设置内存大小
 		r.ParseMultipartForm(32 << 20)
 
@@ -33,7 +34,23 @@ func upload() http.HandlerFunc {
 			return
 		}
 		defer file.Close()
-		//fmt.Fprintf(w, "%v", handler.Header)
+		// 文件后缀
+		fileExt := strings.ToLower(path.Ext(handler.Filename))
+		if !help.InArray(fileExt, []string{
+			".png",
+			".jpeg",
+			".jpg",
+			".icon",
+		}) {
+			response.Error(w, errcode.NotSupportedFileExt)
+			return
+		}
+
+		// 判断文件小于3M
+		if handler.Size > 3*1024*1024*1024 {
+			response.Error(w, errcode.FileTooLarge)
+			return
+		}
 
 		//创建上传目录
 		if _, err := os.Stat("/data/images"); os.IsNotExist(err) {
@@ -44,7 +61,8 @@ func upload() http.HandlerFunc {
 			}
 		}
 
-		filePath := "/data/images/" + handler.Filename
+		filename := help.RandStrForNow()
+		filePath := "/data/images/" + filename
 		if _, err = os.Stat(filePath); err == nil {
 			response.Error(w, errcode.FileExists.AddError(err))
 			return
@@ -63,7 +81,8 @@ func upload() http.HandlerFunc {
 			return
 		}
 
-		response.Ok(w, handler.Filename)
+		host := r.Host
+		response.Ok(w, fmt.Sprintf("%s/images/%s", host, filename))
 	}
 }
 
