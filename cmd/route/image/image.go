@@ -62,7 +62,7 @@ func upload() http.HandlerFunc {
 		}
 
 		filename := help.RandStrForNow()
-		filePath := "/data/images/" + filename
+		filePath := "/data/images/" + filename + fileExt
 		if _, err = os.Stat(filePath); err == nil {
 			response.Error(w, errcode.FileExists.AddError(err))
 			return
@@ -81,8 +81,9 @@ func upload() http.HandlerFunc {
 			return
 		}
 
-		host := r.Host
-		response.Ok(w, fmt.Sprintf("%s/images/%s", host, filename))
+		// todo
+		domain := "https://www.zzrs.xyz"
+		response.Ok(w, fmt.Sprintf("%s/images/%s%s", domain, filename, fileExt))
 	}
 }
 
