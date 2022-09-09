@@ -66,7 +66,7 @@ func _init() {
 }
 
 func init() {
-	rootCmd.Flags().BoolVarP(&verbose, "verbose", "", false, "日志DEBUG模式")
+	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "", false, "日志DEBUG模式")
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 	viper.AutomaticEnv()
 
