@@ -18,6 +18,7 @@ var migrateCmd = &cobra.Command{
 		mysqlClient := db.NewMysql()
 		mysqlClient.Set("gorm:table_options", "ENGINE=InnoDB")
 		mysqlClient.AutoMigrate(&entity.Category{})
+		mysqlClient.AutoMigrate(&entity.Goods{})
 		mysqlClient.AutoMigrate(&entity.Kv{})
 
 		logging.DebugF("migrate success")

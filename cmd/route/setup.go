@@ -5,6 +5,7 @@ import (
 	"github.com/wpf1118/api/cmd/route/category"
 	"github.com/wpf1118/api/cmd/route/color"
 	"github.com/wpf1118/api/cmd/route/common"
+	"github.com/wpf1118/api/cmd/route/goods"
 	"github.com/wpf1118/api/cmd/route/home"
 	"github.com/wpf1118/api/cmd/route/image"
 	"github.com/wpf1118/api/cmd/route/user"
@@ -19,6 +20,7 @@ func SetupRouter(r *chi.Mux) {
 			r.Route("/color", color.Route())
 			r.Route("/home", home.Route())
 			r.Route("/category", category.Route())
+			r.Route("/goods", goods.Route())
 		})
 	})
 }
