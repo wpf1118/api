@@ -18,12 +18,25 @@ func NewGoodsServ() *goodsServ {
 }
 
 func (s *goodsServ) Paginate(req Req) (count int64, list []Goods, err error) {
-	err = s.Model(&Goods{}).
+	tx := s.Model(&Goods{}).
 		Scopes(
 			dto.MakeCondition(req),
 			dto.Paginate(req.GetSize(), req.GetPage()),
 		).
-		Find(&list).Count(&count).Error
+		Find(&list).Count(&count)
+
+	//sql := s.ToSQL(func(tx *gorm.DB) *gorm.DB {
+	//	return tx.Model(&Goods{}).
+	//		Scopes(
+	//			dto.MakeCondition(req),
+	//			dto.Paginate(req.GetSize(), req.GetPage()),
+	//		).
+	//		Find(&list).Count(&count)
+	//})
+	//
+	//logging.DebugF("%s", sql)
+
+	err = tx.Error
 	if err != nil {
 		logging.ErrorF("db error: %s", err)
 		return
