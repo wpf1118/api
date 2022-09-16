@@ -39,6 +39,10 @@ deploy: binary
 	scp ./dist/api wmf:/data/console;
 	ssh -t wmf "cd /root/deploy-api && docker-compose restart api && exit";
 
+.PHONY: pull
+pull:
+	@echo "+ $@"
+	ssh -t wmf "cd /data/www/shop-admin && git pull"
 
 .PHONY: proto
 proto:

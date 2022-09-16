@@ -9,11 +9,15 @@ import (
 	"github.com/wpf1118/api/cmd/route/home"
 	"github.com/wpf1118/api/cmd/route/image"
 	"github.com/wpf1118/api/cmd/route/user"
+	"github.com/wpf1118/toolbox/tools/response"
+	"net/http"
 )
 
 func SetupRouter(r *chi.Mux) {
 	r.Route("/api", func(r chi.Router) {
 		r.Route("/v1", func(r chi.Router) {
+			r.Post("/ping", ping)
+			r.Get("/ping", ping)
 			r.Route("/user", user.Route())
 			r.Route("/common", common.Route())
 			r.Route("/image", image.Route())
@@ -23,4 +27,8 @@ func SetupRouter(r *chi.Mux) {
 			r.Route("/goods", goods.Route())
 		})
 	})
+}
+
+func ping(w http.ResponseWriter, r *http.Request) {
+	response.Ok(w, "pong")
 }
